@@ -7,5 +7,5 @@ langchain-core
 langchain-community
 langgraph
 langchain.agents
-# langchain_tavily
+langchain_tavily
 jinja2

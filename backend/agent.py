@@ -1,9 +1,9 @@
 import os 
 from dotenv import load_dotenv, find_dotenv
 from langchain.agents import create_agent
-from langchain_core.messages import HumanMessage
-from langchain_community.tools import TavilySearchResults
-# from langchain_tavily import TavilySearch
+from langchain_core.messages import HumanMessage  , SystemMessage
+
+from langchain_tavily import TavilySearch
 from langchain_groq import ChatGroq
 
 _ = load_dotenv(find_dotenv())  # Load environment variables from .env file
@@ -15,24 +15,14 @@ os.environ["GROQ_API_KEY"] = GROQ_API_KEY
 os.environ["TAVILY_API_KEY"] = TAVILY_API_KEY
 
 
-search = TavilySearchResults(max_results=3)
+search = TavilySearch(max_results=3)
 
-
-# tool= [search]
-# agent_executor = create_agent(chatMOdel, tool)
-
-# reponse = agent_executor.invoke({"messages":[HumanMessage(content="What is the top 10  movies in 2025?")]})
-# print(reponse)
-
-from langchain.agents import create_agent
-from langchain_groq import ChatGroq
 
 def get_agent():
     chatModel = ChatGroq(
         model="meta-llama/llama-4-scout-17b-16e-instruct"
     )
-
     tools = [search]  # add tools later
-
     agent = create_agent(chatModel, tools)
     return agent
+
