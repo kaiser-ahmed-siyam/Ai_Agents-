@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+langchain
+langchain-groq
+python-dotenv
+langchain-core
+langchain-community
+langgraph
+langchain.agents
+# langchain_tavily
+jinja2
