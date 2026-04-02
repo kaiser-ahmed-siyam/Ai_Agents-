@@ -36,7 +36,7 @@ class ChatRequest(BaseModel):
 # ✅ Serve main HTML
 @app.get("/")
 def serve_home():
-    return
+    return FileResponse(os.path.join(FRONTEND_DIR, "index.html"))
     # return FileResponse("../frontend/index.html")
 
 # ✅ Chat API
@@ -63,6 +63,9 @@ async def chat(req: ChatRequest):
 
     return StreamingResponse(stream(), media_type="text/plain")
 
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
 
 # from fastapi import FastAPI, Request
 # from fastapi.responses import HTMLResponse
