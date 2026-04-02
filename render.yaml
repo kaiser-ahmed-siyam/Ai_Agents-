@@ -3,7 +3,7 @@ services:
     name: Ai-agent-app
     runtime: python
     buildCommand: pip install -r backend/requirements.txt
-    startCommand: cd backend && gunicorn -k uvicorn.workers.UvicornWorker app:app
+    startCommand: cd backend && gunicorn -k uvicorn.workers.UvicornWorker backend.app:app
     envVars:
       - key: GROQ_API_KEY
         sync: false

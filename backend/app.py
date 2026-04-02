@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
-from agent import get_agent
+from backend.agent import get_agent
 from fastapi.responses import StreamingResponse
 from langchain_core.messages import HumanMessage  , SystemMessage
 
