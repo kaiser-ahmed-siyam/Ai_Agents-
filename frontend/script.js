@@ -61,11 +61,13 @@ async function sendMessage() {
         const chunk = decoder.decode(value);
         // botDiv.textContent += chunk;
         if (isFirstChunk) {
-             botDiv.innerHTML = `<i>${chunk}</i>`;
+             botDiv.textContent = `<i>${chunk}</i>`;
              isFirstChunk = false;
         } else {
-        botDiv.innerHTML += chunk;
+        botDiv.textContent+= chunk;
+        // botDiv.innerHTML += chunk;
         }
+
         
 
         // auto scroll
