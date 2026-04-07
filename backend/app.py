@@ -30,8 +30,11 @@ app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
 
 agent = get_agent()
 
+session_memory = {}
+
 class ChatRequest(BaseModel):
     message: str
+    session_id: str
 
 # ✅ Serve main HTML
 @app.get("/")
@@ -40,26 +43,59 @@ def serve_home():
     # return FileResponse("../frontend/index.html")
 
 # ✅ Chat API
+# @app.post("/chat")
+# async def chat(req: ChatRequest):
+
+#     async def stream():
+#         # response = agent.invoke({
+#         #     "messages": [("user", req.message)]
+#         # })
+#         response = agent.invoke({
+#                          "messages": [
+#                          ("system", "You are a helpful assistant. ALWAYS use search tools when asked about current events, news, or future information."),
+#                           ("user", req.message)
+#                          ]
+#                         })
+
+#         full_text = response["messages"][-1].content
+
+#         # simulate streaming (token by token)
+#         for word in full_text.split(" "):
+#             yield word + " "
+#             await asyncio.sleep(0.05)
+
+#     return StreamingResponse(stream(), media_type="text/plain")
+
 @app.post("/chat")
 async def chat(req: ChatRequest):
 
+    # get session history
+    if req.session_id not in session_memory:
+        session_memory[req.session_id] = []
+
+    history = session_memory[req.session_id]
+
     async def stream():
-        # response = agent.invoke({
-        #     "messages": [("user", req.message)]
-        # })
+
+        # combine history + new message
+        messages = [
+            ("system", "You are a helpful assistant. ALWAYS use search tools when needed.")
+        ] + history + [("user", req.message)]
+
         response = agent.invoke({
-                         "messages": [
-                         ("system", "You are a helpful assistant. ALWAYS use search tools when asked about current events, news, or future information."),
-                          ("user", req.message)
-                         ]
-                        })
+            "messages": messages
+        })
 
         full_text = response["messages"][-1].content
 
-        # simulate streaming (token by token)
-        for word in full_text.split(" "):
+        # save user + assistant message
+        history.append(("user", req.message))
+        history.append(("assistant", full_text))
+
+        # stream response
+        for word in full_text.split():
             yield word + " "
-            await asyncio.sleep(0.05)
+            await asyncio.sleep(0.03)
 
     return StreamingResponse(stream(), media_type="text/plain")
 
@@ -67,43 +103,3 @@ if __name__ == "__main__":
     import uvicorn
     uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
 
-# from fastapi import FastAPI, Request
-# from fastapi.responses import HTMLResponse
-# from pydantic import BaseModel
-# from agent import get_agent
-# from fastapi.templating import Jinja2Templates
-# from fastapi.middleware.cors import CORSMiddleware
-
-# app = FastAPI()
-
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],  # allow all (for dev)
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
-
-# templates = Jinja2Templates(directory="frontend")
-# agent = get_agent()
-
-# class ChatRequest(BaseModel):
-#     message: str
-
-# @app.get("/")
-# def root():
-#     return {"status": "API running"}
-
-# @app.get("/", response_class=HTMLResponse)
-# async def read_root(request: Request):
-#     return templates.TemplateResponse("index.html", {"request": request})
-
-# @app.post("/chat")
-# def chat(req: ChatRequest):
-#     response = agent.invoke({
-#         "messages": [("user", req.message)]
-#     })
-
-#     return {
-#         "response": response["messages"][-1].content
-#     }

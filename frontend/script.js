@@ -15,6 +15,13 @@
 //     input.value = "";
 // }
 
+let session_id = localStorage.getItem("session_id");
+
+if (!session_id) {
+    session_id = Math.random().toString(36).substring(7);
+    localStorage.setItem("session_id", session_id);
+}
+
 
 async function sendMessage() {
     const input = document.getElementById("user-input");
@@ -40,7 +47,8 @@ async function sendMessage() {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ message })
+        body: JSON.stringify({ message : message,
+                               session_id: session_id })
     });
 
     const reader = response.body.getReader();
