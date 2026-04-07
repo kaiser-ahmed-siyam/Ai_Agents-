@@ -75,6 +75,13 @@ async def chat(req: ChatRequest):
 
     history = session_memory[req.session_id]
 
+    query = req.message.lower()
+
+    # 🔍 Detect search intent
+    if any(word in query for word in ["latest", "news", "today", "2026", "current", "recent"]):
+        yield "🔍 Searching...\n"
+        await asyncio.sleep(1)
+
     async def stream():
 
         # combine history + new message
