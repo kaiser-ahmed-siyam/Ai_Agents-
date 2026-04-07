@@ -75,14 +75,19 @@ async def chat(req: ChatRequest):
 
     history = session_memory[req.session_id]
 
-    query = req.message.lower()
-
-    # 🔍 Detect search intent
-    if any(word in query for word in ["latest", "news", "today", "2026", "current", "recent"]):
-        yield "🔍 Searching...\n"
-        await asyncio.sleep(1)
+    
 
     async def stream():
+        
+        query = req.message.lower()
+
+        # 🔍 Detect search intent
+        if any(word in query for word in ["latest", "news", "today", "2026", "current", "recent"]):
+            yield "🔍 Searching...\n"
+            await asyncio.sleep(1)
+        else:
+            yield "🤔 Thinking...\n"
+            await asyncio.sleep(0.5)
 
         # combine history + new message
         messages = [
@@ -94,8 +99,9 @@ async def chat(req: ChatRequest):
         })
 
         full_text = response["messages"][-1].content
-        yield "✍️ Generating answer...\n"
         
+        yield "✍️ Generating answer...\n"
+
         # save user + assistant message
         history.append(("user", req.message))
         history.append(("assistant", full_text))
