@@ -69,48 +69,34 @@ def serve_home():
 @app.post("/chat")
 async def chat(req: ChatRequest):
 
-    # get session history
-    if req.session_id not in session_memory:
-        session_memory[req.session_id] = []
-
-    history = session_memory[req.session_id]
-
-    
-
     async def stream():
-        
+
         query = req.message.lower()
 
-        # 🔍 Detect search intent
-        if any(word in query for word in ["latest", "news", "today", "2026", "current", "recent"]):
+        # status message
+        if any(word in query for word in ["latest", "news", "today", "2026", "current"]):
             yield "🔍 Searching...\n"
             await asyncio.sleep(1)
         else:
             yield "🤔 Thinking...\n"
             await asyncio.sleep(0.5)
 
-        # combine history + new message
-        messages = [
-            ("system", "You are a helpful assistant. ALWAYS use search tools when needed.")
-        ] + history + [("user", req.message)]
-
         response = agent.invoke({
-            "messages": messages
+            "messages": [
+                ("system", "You are a helpful assistant. ALWAYS use search tools when needed."),
+                ("user", req.message)
+            ]
         })
 
         full_text = response["messages"][-1].content
-        
+
         yield "✍️ Generating answer...\n"
 
-        # save user + assistant message
-        history.append(("user", req.message))
-        history.append(("assistant", full_text))
-
-        # stream response
         for word in full_text.split():
             yield word + " "
             await asyncio.sleep(0.03)
 
+    # ✅ RETURN MUST BE HERE (outside stream)
     return StreamingResponse(stream(), media_type="text/plain")
 
 if __name__ == "__main__":
