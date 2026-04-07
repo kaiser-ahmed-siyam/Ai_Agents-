@@ -1,20 +1,4 @@
 
-
-//     const res = await fetch("http://127.0.0.1:8000/chat", {
-//         method: "POST",
-//         headers: {
-//             "Content-Type": "application/json"
-//         },
-//         body: JSON.stringify({ message })
-//     });
-
-//     const data = await res.json();
-
-//     chatBox.innerHTML += `<div class="bot">${data.response}</div>`;
-
-//     input.value = "";
-// }
-
 let session_id = localStorage.getItem("session_id");
 
 if (!session_id) {
@@ -59,14 +43,14 @@ async function sendMessage() {
         if (done) break;
 
         const chunk = decoder.decode(value);
-        // botDiv.textContent += chunk;
-        if (isFirstChunk) {
-             botDiv.textContent = `<i>${chunk}</i>`;
-             isFirstChunk = false;
-        } else {
-        botDiv.textContent+= chunk;
-        // botDiv.innerHTML += chunk;
-        }
+        botDiv.textContent += chunk;
+        // if (isFirstChunk) {
+        //      botDiv.textContent = `<i>${chunk}</i>`;
+        //      isFirstChunk = false;
+        // } else {
+        // botDiv.textContent+= chunk;
+        // // botDiv.innerHTML += chunk;
+        // }
 
         
 
