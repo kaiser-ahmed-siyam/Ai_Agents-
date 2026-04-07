@@ -94,7 +94,7 @@ async def chat(req: ChatRequest):
         })
 
         full_text = response["messages"][-1].content
-
+        yield "✍️ Generating answer...\n"
         # save user + assistant message
         history.append(("user", req.message))
         history.append(("assistant", full_text))

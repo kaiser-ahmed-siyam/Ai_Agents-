@@ -35,6 +35,11 @@ body {
     text-align: left;
 }
 
+.bot i {
+    color: #94a3b8;
+    font-style: italic;
+}
+
 .input-area {
     display: flex;
     margin-top: 10px;
