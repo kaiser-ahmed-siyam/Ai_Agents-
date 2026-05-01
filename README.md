@@ -50,19 +50,24 @@ and tool chaining, making it closer to production-grade AI agents.
 # Project Setup
 
 ### Clone git repo 
+```bash
 "git clone https://github.com/kaiser-ahmed-siyam/Ai_Agents-" 
-
+```
 ### Create virtual Environment
+```bash
 python3.11 -m venv venv
-
+```
 ### Activate virtual environment
+```bash
 venv\Scripts\Activate.ps1
-
-# Install requirements
+```
+### Install requirements
+```bash
 pip install -r requirements.txt
-
-# Run the app locally
+```
+### Run the app locally
+```bash
 uvicorn app:app --reload
-
-# Web service
+```
+### Web Application
 <a href="https://ai-agents-n59d.onrender.com">Chat-agent<a/>
