@@ -2,9 +2,11 @@
 ```
 🧠 Overview
 
-This project is a real-time AI agent system that performs intelligent reasoning, dynamic tool selection and live web search to generate accurate, context-aware responses.
+This project is a real-time AI agent system that performs intelligent reasoning, dynamic tool selection
+and live web search to generate accurate, context-aware responses.
 
-Unlike basic chatbots, this system simulates autonomous decision-making using multi-step workflows and tool chaining, making it closer to production-grade AI agents.
+Unlike basic chatbots, this system simulates autonomous decision-making using multi-step workflows
+and tool chaining, making it closer to production-grade AI agents.
 
 ✨ Features
   ⚡ Real-time response generation with low latency
